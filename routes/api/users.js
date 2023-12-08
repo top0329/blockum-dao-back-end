@@ -12,7 +12,7 @@ const User = require('../../models/User');
 router.get('/all', async (req, res) => {
   // const users = User.find({});
   // console.log(users);
-  console.log('/all hi');
+  res.send({ mgs: 'all users' });
 });
 
 // @route    POST api/users
@@ -30,8 +30,7 @@ router.post(
     try {
       let user = await User.findOne({ walletAddress });
       if (user) {
-        return res
-          .json({ msg: 'User already exists' });
+        return res.json({ msg: 'User already exists' });
       }
       // const avatar = normalize(
       //   gravatar.url(email, {
