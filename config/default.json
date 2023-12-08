@@ -1,0 +1,4 @@
+{
+  "mongoURI": "mongodb+srv://arescolin:XmUm9NwCGRvi2p1p@cluster0.xpyoyhp.mongodb.net/?authMechanism=SCRAM-SHA-1",
+  "jwtSecret": "secret"
+}
