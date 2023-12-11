@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-const Distribution = new Schema(
+const FGOLDistributionSchema = new Schema(
   {
     user: {
       type: Schema.Types.ObjectId,
@@ -15,4 +15,4 @@ const Distribution = new Schema(
   { timestamps: true }
 );
 
-module.exports = mongoose.model('fgol-distribution', Distribution);
+module.exports = mongoose.model('fgol-distribution', FGOLDistributionSchema);

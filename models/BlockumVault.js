@@ -3,7 +3,7 @@ const Schema = mongoose.Schema;
 
 const VaultAction = require('../config/vaultAction');
 
-const CategorySchema = new Schema(
+const BlockumVaultSchema = new Schema(
   {
     user: {
       type: Schema.Types.ObjectId,
@@ -22,4 +22,4 @@ const CategorySchema = new Schema(
   { timestamps: true }
 );
 
-module.exports = mongoose.model('blockum-vault', CategorySchema);
+module.exports = mongoose.model('blockum-vault', BlockumVaultSchema);

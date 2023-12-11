@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-const Distribution = new Schema(
+const ProposalSchema = new Schema(
   {
     user: {
       type: Schema.Types.ObjectId,
@@ -27,4 +27,4 @@ const Distribution = new Schema(
   { timestamps: true }
 );
 
-module.exports = mongoose.model('proposal', Distribution);
+module.exports = mongoose.model('proposal', ProposalSchema);
