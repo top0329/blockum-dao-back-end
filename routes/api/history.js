@@ -8,38 +8,58 @@ const User = require('../../models/User');
 const History  = require('../../models/DepositHistory');
 
 router.post(
-  '/deposit',
+  '/',
   check('amount', 'amount is required').notEmpty(),
-  check('walletAddress', 'walletAddress is required').notEmpty(),
   check('created', 'created is required').notEmpty(),
-  check('type', 'type is required').notEmpty(),
+  check('type', 'created is required').notEmpty(),
+  check('walletAddress', "Wallet Address is required").notEmpty(),
   async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.json({ errors: errors.array() });
     }
+
     try {
-      const { amount, walletAddress, created, type } = req.body;
+      const { amount, created, type, walletAddress } = req.body;
+      
       let user = await User.findOne({ walletAddress });
       if (!user) {
         return res
           .status(400)
           .json({ errors: [{ msg: 'User not found' }] });
       }
-      const newDeposit = new BlockumVault({
+      const newDeposit = new History({
         user: user._id,
-        LPTokenAmount: amount,
-        vaultAction: VaultAction.Deposit,
+        amount, created, type
       });
       await newDeposit.save();
-      
-      const newDepositHistory = new History({
-        user: user._id,
-        created, type, amount
-      });
+      res.json(newDeposit);
+    } catch (err) {
+      console.error(err.message);
+      res.status(500).send('Server Error');
+    }
+  }
+);
 
-      await newDepositHistory.save();
-      res.json(newDepositHistory);
+router.get(
+  '/:walletAddress',
+  async (req, res) => {
+    const { walletAddress } = req.params;
+    if (!walletAddress) {
+      return res.json({ errors: 'no wallet address' });
+    }
+
+    try {
+      
+      let user = await User.findOne({ walletAddress });
+      if (!user) {
+        return res
+          .status(400)
+          .json({ errors: [{ msg: 'User not found' }] });
+      }
+
+      const deposits = await History.find({user:user._id}).sort("-created");
+      res.json(deposits);
     } catch (err) {
       console.error(err.message);
       res.status(500).send('Server Error');
@@ -49,35 +69,25 @@ router.post(
 
 router.post(
   '/withdraw',
-  check('amount', 'amount is required').notEmpty(),
-  check('walletAddress', 'walletAddress is required').notEmpty(),
-  check('created', 'created is required').notEmpty(),
-  check('type', 'type is required').notEmpty(),
+  check('withdrawAmount', 'WithdrawAmount is required').notEmpty(),
   async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.json({ errors: errors.array() });
     }
     try {
-      const { amount, walletAddress, created, type } = req.body;
+      const { withdrawAmount, walletAddress } = req.body;
       let user = await User.findOne({ walletAddress });
       if (!user) {
         return res.status(400).json({ errors: [{ msg: 'User not found' }] });
       }
       const newWithdraw = new BlockumVault({
         user: user._id,
-        LPTokenAmount: amount,
+        LPTokenAmount: withdrawAmount,
         vaultAction: VaultAction.Withdraw,
       });
       await newWithdraw.save();
-
-      const newWithdrawtHistory = new History({
-        user: user._id,
-        created, type, amount
-      });
-
-      await newWithdrawtHistory.save();
-      res.json(newWithdrawtHistory);
+      res.json(newWithdraw);
     } catch (err) {
       console.error(err.message);
       res.status(500).send('Server Error');

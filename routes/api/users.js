@@ -35,7 +35,7 @@ router.post(
       // const avatar = normalize(
       //   gravatar.url(email, {
       //     s: '200',
-      //     r: 'pg',
+      //     r: 'pg',s
       //     d: 'mm',
       //   }),
       //   { forceHttps: true }

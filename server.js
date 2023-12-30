@@ -23,6 +23,7 @@ app.use(cors());
 app.use('/api/users', require('./routes/api/users'));
 app.use('/api/blockum-vault', require('./routes/api/blockumVault'));
 app.use('/api/fgol-distribution', require('./routes/api/fgolDistribution'));
+app.use('/api/history', require('./routes/api/history'));
 
 // Serve static assets in production
 // if (process.env.NODE_ENV === 'production') {

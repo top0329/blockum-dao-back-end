@@ -24,6 +24,8 @@ router.post(
         FGOLTokenAmount: distributionAmount,
       });
       await newDistribution.save();
+
+      console.log(newDistribution);
       res.json(newDistribution);
     } catch (err) {
       console.error(err.message);
@@ -62,7 +64,7 @@ router.post(
 
 router.get('/history', async (req, res) => {
   try {
-    const distributionHistory = await FGOLDistribution.find();
+    const distributionHistory = await FGOLDistribution.find().sort("-createdAt");
     res.json(distributionHistory);
   } catch (err) {
     console.error(err.message);
