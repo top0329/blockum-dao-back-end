@@ -11,6 +11,18 @@ const FGOLDistributionSchema = new Schema(
       type: Number,
       required: true,
     },
+    blockHash: {
+      type: String,
+      require: true
+    },
+    transactionHash: {
+      type: String,
+      require: true
+    },
+    transactionIndex: {
+      type: String,
+    }
+
   },
   { timestamps: true }
 );

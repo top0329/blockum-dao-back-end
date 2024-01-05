@@ -14,7 +14,7 @@ router.post(
       return res.json({ errors: errors.array() });
     }
     try {
-      const { distributionAmount, walletAddress } = req.body;
+      const { distributionAmount, walletAddress, transactionHash, blockHash, transactionIndex } = req.body;
       let user = await User.findOne({ walletAddress });
       if (!user) {
         return res.status(400).json({ errors: [{ msg: 'User not found' }] });
@@ -22,6 +22,9 @@ router.post(
       const newDistribution = new FGOLDistribution({
         user: user._id,
         FGOLTokenAmount: distributionAmount,
+        transactionHash,
+        blockHash,
+        transactionIndex
       });
       await newDistribution.save();
 
@@ -64,7 +67,7 @@ router.post(
 
 router.get('/history', async (req, res) => {
   try {
-    const distributionHistory = await FGOLDistribution.find().sort("-createdAt");
+    const distributionHistory = await FGOLDistribution.find().populate('user').sort("-createdAt");
     res.json(distributionHistory);
   } catch (err) {
     console.error(err.message);

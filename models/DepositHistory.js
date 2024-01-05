@@ -22,9 +22,20 @@ const DepositHistorySchema = new Schema(
     type: {
       type: Boolean,
       require: true
+    },
+    blockHash: {
+      type: String,
+      require: true
+    },
+    transactionHash: {
+      type: String,
+      require: true
+    },
+    transactionIndex: {
+      type: String,
     }
   },
   { timestamps: true }
 );
 
-module.exports = mongoose.model('deposits', DepositHistorySchema);
+module.exports = mongoose.model('deposit', DepositHistorySchema);

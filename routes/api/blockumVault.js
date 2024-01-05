@@ -19,7 +19,7 @@ router.post(
       return res.json({ errors: errors.array() });
     }
     try {
-      const { amount, walletAddress, created, type } = req.body;
+      const { amount, walletAddress, created, type, transactionHash, blockHash, transactionIndex  } = req.body;
       let user = await User.findOne({ walletAddress });
       if (!user) {
         return res
@@ -30,12 +30,20 @@ router.post(
         user: user._id,
         LPTokenAmount: amount,
         vaultAction: VaultAction.Deposit,
+        transactionHash,
+        blockHash,
+        transactionIndex
       });
+
+      console.log(newDeposit)
       await newDeposit.save();
       
       const newDepositHistory = new History({
         user: user._id,
-        created, type, amount
+        created, type, amount,
+        transactionHash,
+        blockHash,
+        transactionIndex
       });
 
       await newDepositHistory.save();
@@ -59,7 +67,7 @@ router.post(
       return res.json({ errors: errors.array() });
     }
     try {
-      const { amount, walletAddress, created, type } = req.body;
+      const { amount, walletAddress, created, type, transactionHash, blockHash, transactionIndex } = req.body;
       let user = await User.findOne({ walletAddress });
       if (!user) {
         return res.status(400).json({ errors: [{ msg: 'User not found' }] });
@@ -68,12 +76,20 @@ router.post(
         user: user._id,
         LPTokenAmount: amount,
         vaultAction: VaultAction.Withdraw,
+        transactionHash,
+        blockHash,
+        transactionIndex
       });
+
+      console.log(newWithdraw)
       await newWithdraw.save();
 
       const newWithdrawtHistory = new History({
         user: user._id,
-        created, type, amount
+        created, type, amount,
+        transactionHash,
+        blockHash,
+        transactionIndex
       });
 
       await newWithdrawtHistory.save();
